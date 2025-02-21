@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>IoT Automation</title>
+  <style>
+    body { 
+      text-align: center; 
+      font-family: Arial, sans-serif; 
+      background-color: #f5f5f5; 
+      display: flex;
+      justify-content: flex-start; /* Changed to flex-start to ensure header is visible */
+      align-items: center;
+      flex-direction: column;
+      height: 100vh;
+      margin: 0;
+    }
+    .header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: linear-gradient(135deg, violet, purple);
+      width: 100%;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .header img {
+      width: 100px; /* Adjust size for better proportion */
+      height: auto;
+      margin-bottom: 15px;
+      border-radius: 50%; /* Adds a rounded effect */
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+    .header h1 {
+      font-size: 20px; /* Smaller text */
+      margin: 5px 0;
+      font-weight: 600;
+      color: white;
+      text-align: center;
+    }
+    .grid-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .left-column, .right-column {
+      display: grid;
+      gap: 20px;
+    }
+    .left-column {
+      grid-template-rows: repeat(6, 1fr);
+    }
+    .right-column {
+      grid-template-rows: repeat(7, 1fr);
+    }
+    .device { 
+      width: 100px; 
+      height: 100px; 
+      background: grey; 
+      border-radius: 10px; 
+      position: relative; 
+    }
+    .on { 
+      background: black; 
+    }
+    video { 
+      width: 100%; 
+      height: 100%; 
+      position: absolute; 
+      top: 0; 
+      left: 0; 
+    }
+
+    @media (max-width: 768px) {
+      .grid-container {
+        grid-template-columns: 1fr;
+      }
+      .left-column, .right-column {
+        grid-template-rows: repeat(auto-fill, minmax(100px, 1fr));
+      }
+      .device {
+        width: 80px; /* Adjust the size as needed for tablet view */
+        height: 80px; /* Adjust the size as needed for tablet view */
+      }
+      .header img {
+        width: 120px; /* Adjust the size as needed for tablet view */
+      }
+    }
+
+    /* Media query for mobile view */
+    @media (max-width: 600px) {
+      .grid-container {
+        grid-template-columns: 1fr;
+      }
+      .left-column, .right-column {
+        grid-template-rows: repeat(auto-fill, minmax(100px, 1fr));
+      }
+      .device {
+        width: 80px; /* Adjust the size as needed for mobile view */
+        height: 80px; /* Adjust the size as needed for mobile view */
+      }
+      .header img {
+        width: 100px; /* Adjust the size as needed for mobile view */
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header" style="flex-direction: row;">
+    <img src="download.jpeg" alt="Logo" style="margin-right: 20px;">
+    <div>
+      <h1>Department of Computer Science and Engineering</h1>
+      <h1>Sri Venkateswara College of Engineering</h1>
+      <h1>Lab-8 Automation Box</h1>
+    </div>
+  </div>
+  <div class="grid-container">
+    <div class="left-column">
+      <div class="device" id="device7" onclick="toggleDevice(7)">
+        <video src="video 3.mp4"></video>
+      </div>
+      <div class="device" id="device8" onclick="toggleDevice(8)">
+        <video src="video 3.mp4"></video>
+      </div>
+      <div class="device" id="device9" onclick="toggleDevice(9)">
+        <video src="video 3.mp4"></video>
+      </div>
+      <div class="device" id="device10" onclick="toggleDevice(10)">
+        <video src="video 3.mp4"></video>
+      </div>
+      <div class="device" id="device11" onclick="toggleDevice(11)">
+        <video src="video 3.mp4"></video>
+      </div>
+      <div class="device" id="device12" onclick="toggleDevice(12)">
+        <video src="video 3.mp4"></video>
+      </div>
+    </div>
+    <div class="right-column">
+      <div class="device" id="device0" onclick="toggleDevice(0)">
+        <video src="video 3.mp4"></video>
+      </div>
+      <div class="device" id="device1" onclick="toggleDevice(1)">
+        <video src="video 3.mp4"></video>
+      </div>
+      <div class="device" id="device2" onclick="toggleDevice(2)">
+        <video src="video 3.mp4"></video>
+      </div>
+      <div class="device" id="device3" onclick="toggleDevice(3)">
+        <video src="video 3.mp4"></video>
+      </div>
+      <div class="device" id="device4" onclick="toggleDevice(4)">
+        <video src="video 3.mp4"></video>
+      </div>
+      <div class="device" id="device5" onclick="toggleDevice(5)">
+        <video src="video 3.mp4"></video>
+      </div>
+      <div class="device" id="device6" onclick="toggleDevice(6)">
+        <video src="video 3.mp4"></video>
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+    // Relay Mapping
+    const relayMapping = {
+        0: [0, 7],  // Lights 1 & 8
+        1: [1, 8],  // Lights 2 & 9
+        2: [2, 9],  // Lights 3 & 10
+        3: [3, 10], // Lights 4 & 11
+        4: [4, 11], // Lights 5 & 12
+        5: [5, 12], // Lights 6 & 13
+        6: [6]      // Light 7 (single)
+    };
+    function toggleDevice(relay) {
+        console.log("Toggling relay:", relay);
+        fetch('/toggle?relay=' + relay)
+        .then(response => response.text())
+        .then(data => { // Find the devices associated with the relay
+            let devices = relayMapping[relay];
+            devices.forEach(deviceId => {
+                let device = document.getElementById('device' + deviceId);
+                device.classList.toggle('on');
+                let video = device.querySelector('video');
+
+                if (device.classList.contains('on')) {
+                    video.play();
+                } else {
+                    video.pause();
+                    video.currentTime = 0;
+                }
+            });
+        })
+        .catch(error => console.error("Error toggling relay:", error));
+    }
+  </script>
+</body>
+</html>
