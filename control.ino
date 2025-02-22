@@ -7,7 +7,7 @@ const char* password = "123456789";      // Your WiFi Password
 WebServer server(80);  // Start HTTP server on port 80
 
 // Relay GPIO pins
-const int relayPins[] = {5, 18, 19, 21, 22, 23, 4};
+const int relayPins[] = {27, 33, 13, 23, 21, 5};
 
 // Relay to Lights Mapping (7 relays control 13 lights)
 const int relayMapping[13] = {
