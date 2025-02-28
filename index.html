@@ -166,32 +166,35 @@
 
   <script>
     const ESP32_IP = "http://192.168.41.143/"; 
-    async function fetchRelayStates() {
-      try {
-        let response = await fetch(`${ESP32_IP}/status`, {
+    async function toggleDevice(relay) {
+    try {
+        let device = document.getElementById('device' + relay);
+        let video = device.querySelector('video');
+
+        // Send API request to toggle relay
+        let response = await fetch(`${ESP32_IP}/toggle?relay=${relay}`, {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         });
-        let data = await response.json();
-        
-        for (let relay in data) {
-            let relayId = relay.replace('relay', '');
-            let device = document.getElementById('device' + relayId);
-            let video = device.querySelector('video');
 
-            if (data[relay] == 1) {
-                device.classList.add('on');
-                video.play();
-            } else {
-                device.classList.remove('on');
-                video.pause();
-                video.currentTime = 0;
-            }
+        let data = await response.json();
+
+        // Update UI instantly based on the response
+        if (data.state == 1) {
+            device.classList.add('on');
+            video.play();
+        } else {
+            device.classList.remove('on');
+            video.pause();
+            video.currentTime = 0;
         }
+
+        // Optional: Fetch updated states after a short delay
+        setTimeout(fetchRelayStates, 500);
     } catch (error) {
-        console.error("Error fetching relay states:", error);
+        console.error("Error toggling device:", error);
     }
 }
 
